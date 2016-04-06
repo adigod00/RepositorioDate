@@ -5,28 +5,44 @@ public class Date{
 	private int month;
 	private int year;
 
-	public Date(int day, int month, int year){
-		this.day=day;
-		this.month=month;
-		this.year=year;
+	public Date(){
+		this.day=1;
+		this.month=1;
+		this.year=2016;
+	}
+	
+	public Date(Date aux){
+		this.day=aux.getDay();
+		this.month=aux.getMonth();
+		this.year=aux.getYear();
+	}
+
+	public Date(int day, int month, int year) throws DateException{
+
 		StringBuffer excepciones=new StringBuffer("");
-		if((this.day<=0) || (this.month<=0) || (this.year<=0)){
-			excepciones.append("ERROR. El año, el mes y el día deben ser mayores que 0.");
+		excepciones.length()=false;
+		if((this.day<1) || (this.day>31)){
+			excepciones.append("ERROR. El día tiene que ser mayor que 0 y menor que 32.\n");
 		}
-		if(this.month>12){
-			excepciones.append("ERROR. El mes debe ser menor 12 y mayor que 0.");
+		if((this.month<1) || (this.month>12)){
+			excepciones.append("ERROR. El mes debe ser menor 12 y mayor que 0.\n");
 		}
-		if(this.day>31){
-			excepciones.append("ERROR. El día debe ser menor que 32 y mayor que 0.");
+		if(this.year<1){
+			excepciones.append("ERROR. El año debe ser mayor que 0.\n");
 		}
-		if((this.month==4) || (this.month==6) || (this.month==9) || (this.month==11)) && (this.day>30)){
-			excepciones.append("ERROR. El mes introducido tiene 30 dias.");
+		if(retorno.checkDay()==false){
+			excepciones.append("ERROR. Día no valido para ese mes.\n");
 		}
-		if((this.month==2) && (this.day>28)){
-			excepciones.append("ERROR. El mes introducido tiene 28 dias.");
+		if(excepciones.length()!=0){
+			throw new DateException(excepciones);
+		}else{
+			this.day=day;
+			this.month=month;
+			this.year=year;
 		}
 
 	}
+
 	public void setDay(int day){
 		this.day=day;
 	}
@@ -145,21 +161,72 @@ public class Date{
 		}
 	}
 	
+	public boolean checkDay(int day, int month){
+		boolean retorno=true;
+			switch(this.month){
+				case 4:
+				case 6:
+				case 9:
+				case 11:
+					if(this.day>30){
+						retorno=false;
+					}
+				break;
+				case 2:
+					if(this.day>28){
+						retorno=false;
+					}
+				break;
+				default:
+					retorno=true;
+			}
+		return retorno;
+	}
+
+	public String leftDays(int day,int month){
+		StringBuffer diasRestantes= new StringBuffer();
+		int i;
+		switch(this.month){
+				case 4:
+				case 6:
+				case 9:
+				case 11:
+					for(i=this.day+1;i<31;i++){
+						diasRestantes.append(i+", ");
+					}
+				break;
+				case 2:
+					for(i=this.day+1;i<29;i++){
+						diasRestantes.append(i+", ");
+					}
+				break;
+				default:
+					for(i=this.day+1;i<32;i++){
+						diasRestantes.append(i+", ");
+					}
+		}
+		return diasRestantes;
+	}
+	
 	public String leftMonths(int month){
-		String mesesRestantes="";
+		StringBuffer mesesRestantes= new StringBuffer();
 		int x;
-		for(x=this.month;x<=12;x++){
+		for(x=this.month+1;x<13;x++){
 			mesesRestantes.append.getMonthName;
 		}
-	return mesesRestantes;
+		return mesesRestantes;
 	}
 
 	public String toString(){
 		StringBuffer salida=new StringBuffer();
 		salida.append("Fecha: "+" ");
-		salida.append("Día:"+this.day+" ");
-		salida.append("Mes:"+this.month+" ");
-		salida.append("Año:"+this.year+" ");
+		salida.append(+this.day+"/");
+		salida.append(+this.month+"/");
+		salida.append(+this.year+"\n");
+		salida.append(aux.getMonthName()+"\n");
+		salida.append(aux.getSeason()+"\n");
+		salida.append(aux.leftMonths()+"\n");
+		salida.append(aux.leftDays()+"\n");
 		return salida.toString();
 	}
 }
