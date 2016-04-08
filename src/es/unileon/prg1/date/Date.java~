@@ -20,21 +20,21 @@ public class Date{
 	public Date(int day, int month, int year) throws DateException{
 
 		StringBuffer excepciones=new StringBuffer("");
-		excepciones.length()=false;
-		if((this.day<1) || (this.day>31)){
-			excepciones.append("ERROR. El día tiene que ser mayor que 0 y menor que 32.\n");
+		if((day<1) || (day>31)){
+			excepciones.append("ERROR. El día tiene que ser mayor que 0 y menor que 32.Valor no válido para día:" + day + "\n");
 		}
-		if((this.month<1) || (this.month>12)){
-			excepciones.append("ERROR. El mes debe ser menor 12 y mayor que 0.\n");
+		if((month<1) || (month>12)){
+			excepciones.append("ERROR. El mes debe ser menor 12 y mayor que 0.Valor no válido para mes:" + month + "\n");
+		}else{
+			if(this.checkDay(day,month)==false){
+				excepciones.append("ERROR. Combinación día/mes no válida:" + day + "/" + month + "\n");
+			}
 		}
-		if(this.year<1){
-			excepciones.append("ERROR. El año debe ser mayor que 0.\n");
-		}
-		if(retorno.checkDay()==false){
-			excepciones.append("ERROR. Día no valido para ese mes.\n");
+		if(year<0){
+			excepciones.append("ERROR. El año debe ser positivo.Valor no válido para año:" + year + "\n");
 		}
 		if(excepciones.length()!=0){
-			throw new DateException(excepciones);
+			throw new DateException(excepciones.toString());
 		}else{
 			this.day=day;
 			this.month=month;
@@ -62,51 +62,56 @@ public class Date{
 		this.month=month;
 	}
 
+	public int getMonth(){
+		return this.month;
+	}
+
 	public String getMonthName(){
-		String month="";
-		switch(this.month){
+		String monthName="";
+		switch(month){
 			case 1:
-				month="Enero";
+				monthName="Enero";
 			break;
 			case 2:
-				month="Febrero";
+				monthName="Febrero";
 			break;
 			case 3:
-				month="Marzo";
+				monthName="Marzo";
 			break;
 			case 4:
-				month="Abril";
+				monthName="Abril";
 			break;
 			case 5:
-				month="Mayo";
+				monthName="Mayo";
 			break;
 			case 6:
-				month="Junio";
+				monthName="Junio";
 			break;
 			case 7:
-				month="Julio";
+				monthName="Julio";
 			break;
 			case 8:
-				month="Agosto";
+				monthName="Agosto";
 			break;
 			case 9:
-				month="Septiembre";
+				monthName="Septiembre";
 			break;
 			case 10:
-				month="Octubre";
+				monthName="Octubre";
 			break;
 			case 11:
-				month="Noviembre";
+				monthName="Noviembre";
 			break;
 			case 12:
-				month="Diciembre";
+				monthName="Diciembre";
 			break;
-	return month;
+		}
+	return monthName;
 	}
 	
 	public String getSeasonName(){
 		String season="";
-		switch(this.month){
+		switch(month){
 			case 1:
 			case 2:
 			case 3:
@@ -127,6 +132,7 @@ public class Date{
 			case 12:
 				season="Otoño";
 			break;
+		}
 	return season;
 	}
 
@@ -153,80 +159,175 @@ public class Date{
 			return false;
 		}
 	}
+
 	public boolean isSame(boolean isSameDay, boolean isSameMonth, boolean isSameYear){
-		if((isSameDay==true) && (isSamenMonth==true) && (isSameYear==true)){
+		if((isSameDay==true) && (isSameMonth==true) && (isSameYear==true)){
 			return true;
 		}else{
 			return false;
 		}
 	}
 	
-	public boolean checkDay(int day, int month){
-		boolean retorno=true;
-			switch(this.month){
+	private int getDaysOfMonth(int month){
+		int days;
+			switch(month){
 				case 4:
 				case 6:
 				case 9:
 				case 11:
-					if(this.day>30){
-						retorno=false;
-					}
+					days=30;
 				break;
 				case 2:
-					if(this.day>28){
-						retorno=false;
-					}
+					days=28;
 				break;
 				default:
-					retorno=true;
+					days=31;
+			}
+		return days;
+	}
+
+	private boolean checkDay(int day, int month){
+		boolean retorno;
+			if(day>this.getDaysOfMonth(month)){
+				retorno=false;
+			}else{
+				retorno=true;
 			}
 		return retorno;
 	}
-
-	public String leftDays(int day,int month){
-		StringBuffer diasRestantes= new StringBuffer();
+	
+	public String sameDaysOfMonth(){
 		int i;
-		switch(this.month){
-				case 4:
-				case 6:
-				case 9:
-				case 11:
-					for(i=this.day+1;i<31;i++){
-						diasRestantes.append(i+", ");
+		String mes="";
+		StringBuffer sameDaysOfMonth = new StringBuffer(); 
+		sameDaysOfMonth.append("Meses con los mismos días: ");
+		if(this.month==2){
+			mes="Febrero";
+		}else{
+			for(i=1;i<13;i++){
+				if((getDaysOfMonth(this.getMonth()))==getDaysOfMonth(i)){		
+					if(this.month==i){
+						mes=mes;
+					}else{
+						switch(i){
+							case 1:
+								mes="Enero";
+							break;
+							case 2:
+								mes="Febrero";
+							break;
+							case 3:
+								mes="Marzo";
+							break;
+							case 4:
+								mes="Abril";
+							break;
+							case 5:
+								mes="Mayo";
+							break;
+							case 6:
+								mes="Junio";
+							break;
+							case 7:
+								mes="Julio";
+							break;
+							case 8:
+								mes="Agosto";
+							break;
+							case 9:
+								mes="Septiembre";
+							break;
+							case 10:
+								mes="Octubre";
+							break;
+							case 11:
+								mes="Noviembre";
+							break;
+							case 12:
+								mes="Diciembre";
+							break;
+						}
+						sameDaysOfMonth.append( mes + " ");
 					}
-				break;
-				case 2:
-					for(i=this.day+1;i<29;i++){
-						diasRestantes.append(i+", ");
-					}
-				break;
-				default:
-					for(i=this.day+1;i<32;i++){
-						diasRestantes.append(i+", ");
-					}
+				}
+			}
 		}
-		return diasRestantes;
+		return sameDaysOfMonth.toString();
 	}
 	
-	public String leftMonths(int month){
-		StringBuffer mesesRestantes= new StringBuffer();
+	public String leftDays(){
+		StringBuffer diasRestantes= new StringBuffer();
+		diasRestantes.append("Días restantes hasta el final del mes: ");
+		int i;
+			for(i=this.day+1;i<(this.getDaysOfMonth(month))+1;i++){
+				diasRestantes.append(i+" ");
+			}
+		return diasRestantes.toString();
+	}
+	
+	public String leftMonths(){
+		StringBuffer mesesRestantes = new StringBuffer();
+		mesesRestantes.append("Meses que quedan hasta final de año: ");
 		int x;
-		for(x=this.month+1;x<13;x++){
-			mesesRestantes.append.getMonthName;
+		String mes="";
+		if(this.month==12){
+			mesesRestantes.append("Este es el último mes del año");
+		}else{
+			for(x=this.month+1;x<13;x++){
+				switch(x){
+					case 1:
+						mes="Enero";
+					break;
+					case 2:
+						mes="Febrero";
+					break;
+					case 3:
+						mes="Marzo";
+					break;
+					case 4:
+						mes="Abril";
+					break;
+					case 5:
+						mes="Mayo";
+					break;
+					case 6:
+						mes="Junio";
+					break;
+					case 7:
+						mes="Julio";
+					break;
+					case 8:
+						mes="Agosto";
+					break;
+					case 9:
+						mes="Septiembre";
+					break;
+					case 10:
+						mes="Octubre";
+					break;
+					case 11:
+						mes="Noviembre";
+					break;
+					case 12:
+						mes="Diciembre";
+					break;
+				}
+				mesesRestantes.append(mes + " ");
+			}
 		}
-		return mesesRestantes;
+		return mesesRestantes.toString();
 	}
 
 	public String toString(){
 		StringBuffer salida=new StringBuffer();
-		salida.append("Fecha: "+" ");
-		salida.append(+this.day+"/");
-		salida.append(+this.month+"/");
-		salida.append(+this.year);
-		salida.append(aux.getMonthName());
-		salida.append(aux.getSeason());
-		salida.append(aux.leftMonths());
-		salida.append(aux.leftDays());
+		salida.append("Fecha: ");
+		salida.append(this.day+"/");
+		salida.append(this.month+"/");
+		salida.append(this.year+"\n");
+		salida.append(this.getSeasonName()+"\n");
+		salida.append(this.sameDaysOfMonth()+"\n");
+		salida.append(this.leftMonths()+"\n");
+		salida.append(this.leftDays()+"\n");
 		return salida.toString();
 	}
 }
